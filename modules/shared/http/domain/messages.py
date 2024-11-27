@@ -1,0 +1,6 @@
+SUCCESS_MESSAGE = "Ok"
+INTERNAL_SERVER_ERROR = "INTERNAL SERVER ERROR"
+WRONG_CREDENTIALS = "Wrong credentials try again"
+MISSING_TOKEN = "Token is missing!"
+EXPIRED_TOKEN = "Token has expired!"
+INVALID_TOKEN = "Invalid token!"
