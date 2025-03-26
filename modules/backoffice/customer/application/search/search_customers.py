@@ -1,5 +1,4 @@
 from modules.backoffice.customer.domain import CustomerRepository
-from modules.backoffice.customer.infrastructure.specifications import SpecificationsBuilder
 
 
 class SearchCustomers:
@@ -14,6 +13,5 @@ class SearchCustomers:
         """
         self.__customer_repository = customer_repository
 
-    def __call__(self, query_params: dict, page: int, page_size: int):
-        specifications = SpecificationsBuilder.build(query_params)
+    def __call__(self, specifications: list, page: int, page_size: int):
         return self.__customer_repository.search(specifications, page_size=page_size, page=page)
