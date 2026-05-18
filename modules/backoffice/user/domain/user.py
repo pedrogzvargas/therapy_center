@@ -8,19 +8,24 @@ class User(AggregateRoot):
     User entity
     """
 
-    def __init__(self, id, username, password, is_active):
-        self.__id = id
-        self.__username = username
-        self.__password = password
-        self.__is_active = is_active
+    def __init__(self, id, username, password, is_active, created_at, updated_at):
+        super().__init__()
+        self.id = id
+        self.username = username
+        self.password = password
+        self.is_active = is_active
+        self.created_at = created_at
+        self.updated_at = updated_at
 
     @staticmethod
-    def create(id, username, password, is_active):
+    def create(id, username, password, is_active, created_at=None, updated_at=None):
         user = User(
             id=id,
             username=username,
             password=password,
             is_active=is_active,
+            created_at=created_at,
+            updated_at=updated_at,
         )
 
         user.record(
@@ -52,32 +57,6 @@ class User(AggregateRoot):
             username=self.username,
             password=self.password,
             is_active=self.is_active,
+            created_at=self.created_at,
+            updated_at=self.updated_at,
         )
-
-    @property
-    def id(self):
-        return self.__id
-
-    @property
-    def username(self):
-        return self.__username
-
-    @username.setter
-    def username(self, username):
-        self.__username = username
-
-    @property
-    def password(self):
-        return self.__password
-
-    @password.setter
-    def password(self, password):
-        self.__password = password
-
-    @property
-    def is_active(self):
-        return self.__is_active
-
-    @is_active.setter
-    def is_active(self, is_active):
-        self.__is_active = is_active

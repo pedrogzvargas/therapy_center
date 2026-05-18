@@ -10,10 +10,10 @@ from modules.shared.serializer.domain import EntitySerializer
 from modules.shared.http.domain import status
 from modules.shared.http.domain import messages
 from modules.shared.environ.domain import Environ
-from modules.shared.environ.infraestructure import PyEnviron
-from modules.shared.serializer.infraestructure.marshmallow import MarshmallowEntitySerializer
-from modules.shared.password_hasher.infraestructure import Argon2PasswordHasher
-from modules.shared.auth.infraestructure import JwtTokenHandler
+from modules.shared.environ.infrastructure import PyEnviron
+from modules.shared.serializer.infrastructure.marshmallow import MarshmallowEntitySerializer
+from modules.shared.password_hasher.infrastructure import Argon2PasswordHasher
+from modules.shared.auth.infrastructure import JwtTokenHandler
 
 
 class LoginController:

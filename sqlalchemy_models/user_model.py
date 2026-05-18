@@ -1,3 +1,5 @@
+from uuid import UUID
+from datetime import datetime
 from sqlalchemy import Table
 from sqlalchemy import Column
 from sqlalchemy import String
@@ -7,11 +9,18 @@ from sqlalchemy.sql import func
 from sqlalchemy.dialects import postgresql
 from sqlalchemy.orm import registry
 
-from app.config.database import metadata
-from modules.backoffice.user.domain import User as BackofficeUser
-from modules.app.user.domain import User as AppUser
+from flask_app.config.database import metadata
 
 mapper_registry = registry()
+
+class UserModel:
+
+    id: UUID
+    username: str
+    password: str
+    is_active: bool
+    created_at: datetime
+    updated_at: datetime
 
 user_table = Table(
     "user",
@@ -30,11 +39,4 @@ user_table = Table(
     ),
 )
 
-mapper_registry.map_imperatively(AppUser, user_table)
-
-mapper_registry.map_imperatively(BackofficeUser, user_table, properties={
-        '_User__id': user_table.c.id,
-        '_User__username': user_table.c.username,
-        '_User__password': user_table.c.password,
-        '_User__is_active': user_table.c.is_active,
-    })
+mapper_registry.map_imperatively(UserModel, user_table)

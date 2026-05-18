@@ -15,8 +15,8 @@ class UserFinder:
         """
         self.__user_repository = user_repository
 
-    def __call__(self, user_id: UUID):
-        user = self.__user_repository.get(id=user_id)
+    async def find(self, user_id: UUID):
+        user = await self.__user_repository.get(id=user_id)
 
         if not user:
             raise UserDoesNotExist(f"User with id: {user_id} does not exist")

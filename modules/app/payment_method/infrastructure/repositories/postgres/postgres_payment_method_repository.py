@@ -2,8 +2,8 @@ from uuid import UUID
 
 from modules.app.payment_method.domain import PaymentMethodRepository
 from modules.shared.environ.domain import Environ
-from modules.shared.environ.infraestructure import PyEnviron
-from modules.shared.persistence.infraestructure import AlchemySessionCreator
+from modules.shared.environ.infrastructure import PyEnviron
+from modules.shared.persistence.infrastructure import AlchemySessionCreator
 from sqlalchemy_models.payment_method_model import AppPaymentMethod as PaymentMethod
 
 

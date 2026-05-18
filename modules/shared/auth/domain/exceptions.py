@@ -1,0 +1,6 @@
+class UserDoesNotExist(Exception):
+    ...
+
+
+class WrongCredentials(Exception):
+    ...

@@ -15,8 +15,8 @@ class CustomerFinder:
         """
         self.__customer_repository = customer_repository
 
-    def __call__(self, customer_id: UUID):
-        customer = self.__customer_repository.get(id=customer_id)
+    async def find(self, customer_id: UUID):
+        customer = await self.__customer_repository.get(id=customer_id)
 
         if not customer:
             raise CustomerDoesNotExist(f"Customer with id: {customer_id} does not exist")

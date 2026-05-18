@@ -3,8 +3,8 @@ from sqlalchemy.orm import Session
 
 from modules.app.user.domain import UserRepository
 from modules.shared.environ.domain import Environ
-from modules.shared.environ.infraestructure import PyEnviron
-from modules.shared.persistence.infraestructure import AlchemySessionCreator
+from modules.shared.environ.infrastructure import PyEnviron
+from modules.shared.persistence.infrastructure import AlchemySessionCreator
 from modules.app.user.domain import User
 
 

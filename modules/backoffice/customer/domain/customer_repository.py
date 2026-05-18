@@ -9,13 +9,13 @@ class CustomerRepository(ABC):
     """
 
     @abstractmethod
-    def add(self, customer):
+    async def add(self, customer):
         """add customer to session"""
         pass
 
     @abstractmethod
-    def search(self, specifications: list, page: int = 1, page_size: int = 10):
-        """search customers"""
+    async def simple_search(self, filters: dict, limit: int = 10, page: int = 1, list_all: bool = False):
+        """simple customer search"""
         pass
 
     @abstractmethod
@@ -24,16 +24,11 @@ class CustomerRepository(ABC):
         pass
 
     @abstractmethod
-    def get(self, id: UUID):
+    async def get(self, id: UUID):
         """get customer"""
         pass
 
     @abstractmethod
-    def save(self, customer):
-        """save customer"""
-        pass
-
-    @abstractmethod
-    def delete(self, customer):
+    async def delete(self, id: UUID):
         """delete customer"""
         pass

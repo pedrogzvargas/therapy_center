@@ -8,4 +8,5 @@ echo "Start app"
 echo "================================================================================================================="
 
 alembic upgrade head
-gunicorn --bind 0.0.0.0:5000 wsgi:app
+
+uvicorn fast_app.main:app --host 0.0.0.0 --port 80

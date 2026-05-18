@@ -8,17 +8,22 @@ class PaymentMethod(AggregateRoot):
     Payment Method entity
     """
 
-    def __init__(self, id, name, is_active):
-        self.__id = id
-        self.__name = name
-        self.__is_active = is_active
+    def __init__(self, id, name, is_active, created_at, updated_at):
+        super().__init__()
+        self.id = id
+        self.name = name
+        self.is_active = is_active
+        self.created_at = created_at
+        self.updated_at = updated_at
 
     @staticmethod
-    def create(id, name, is_active):
+    def create(id, name, is_active, created_at=None, updated_at=None):
         payment_method = PaymentMethod(
             id=id,
             name=name,
             is_active=is_active,
+            created_at=created_at,
+            updated_at=updated_at,
         )
 
         payment_method.record(PaymentMethodCreatedDomainEvent(aggregate_id=id, name=name, is_active=is_active))
@@ -42,25 +47,6 @@ class PaymentMethod(AggregateRoot):
             id=self.id,
             name=self.name,
             is_active=self.is_active,
+            created_at=self.created_at,
+            updated_at=self.updated_at,
         )
-
-    @property
-    def id(self):
-        return self.__id
-
-    @property
-    def name(self):
-        return self.__name
-
-    @name.setter
-    def name(self, name):
-        self.__name = name
-
-    @property
-    def is_active(self):
-        return self.__is_active
-
-    @is_active.setter
-    def is_active(self, is_active):
-        self.__is_active = is_active
-
