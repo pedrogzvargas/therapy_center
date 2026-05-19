@@ -6,7 +6,7 @@ from abc import abstractmethod
 
 class DomainEvent(ABC):
     """
-    Port to domain event
+    Port for domain event
     """
 
     def __init__(self, aggregate_id, event_id=None, occurred_on=None):

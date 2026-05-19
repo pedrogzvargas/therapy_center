@@ -13,7 +13,7 @@ class CustomerSchema(Schema):
 
 class SearchCustomerSchema(Schema):
     page = fields.Int()
-    page_size = fields.Int()
-    total_results = fields.Int()
-    total_pages = fields.Int()
+    limit = fields.Int()
+    total = fields.Int()
+    pages = fields.Int()
     results = fields.Nested(CustomerSchema, many=True)

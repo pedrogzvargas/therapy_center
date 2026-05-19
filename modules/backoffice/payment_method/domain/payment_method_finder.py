@@ -15,8 +15,8 @@ class PaymentMethodFinder:
         """
         self.__payment_method_repository = payment_method_repository
 
-    def __call__(self, payment_method_id: UUID):
-        payment_method = self.__payment_method_repository.get(id=payment_method_id)
+    async def find(self, payment_method_id: UUID):
+        payment_method = await self.__payment_method_repository.get(id=payment_method_id)
 
         if not payment_method:
             raise PaymentMethodDoesNotExist(f"Payment Method with id: {payment_method_id} does not exist")

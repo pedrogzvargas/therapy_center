@@ -4,7 +4,7 @@ from abc import abstractmethod
 
 class EventBus(ABC):
     """
-    Port to event bus creator
+    Port for event bus creator
     """
 
     @abstractmethod

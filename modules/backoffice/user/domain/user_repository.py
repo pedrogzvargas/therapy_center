@@ -9,31 +9,26 @@ class UserRepository(ABC):
     """
 
     @abstractmethod
-    def add(self, user):
+    async def add(self, user):
         """add user to session"""
         pass
 
     @abstractmethod
-    def all(self):
+    async def all(self):
         """list all users"""
         pass
 
     @abstractmethod
-    def get(self, id: UUID):
+    async def get(self, id: UUID):
         """get user"""
         pass
 
     @abstractmethod
-    def save(self, user):
-        """save user"""
-        pass
-
-    @abstractmethod
-    def delete(self, user):
+    async def delete(self, user):
         """delete user"""
         pass
 
     @abstractmethod
-    def soft_delete(self, user):
+    async def soft_delete(self, user):
         """soft delete user"""
         pass

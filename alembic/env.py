@@ -5,8 +5,8 @@ from sqlalchemy import pool
 
 from alembic import context
 
-from modules.shared.environ.infraestructure import PyEnviron
-from modules.shared.persistence.infraestructure import AlchemySessionCreator
+from modules.shared.environ.infrastructure import PyEnviron
+from modules.shared.persistence.infrastructure import AlchemySessionCreator
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

@@ -1,8 +1,8 @@
 from uuid import UUID
 from unittest.mock import MagicMock
-from modules.backoffice.payment_method.application.create import PaymentMethodCreator
-from modules.shared.bus.event.infraestructure.fake import FakeEventBus
-from modules.backoffice.payment_method.infrastructure.repositories.postgres import PostgresPaymentMethodRepository
+from modules.backoffice.payment_method.application import PaymentMethodCreator
+from modules.shared.bus.event.infrastructure import FakeEventBus
+from modules.backoffice.payment_method.infrastructure.repositories import PostgresPaymentMethodRepository
 
 from sqlalchemy.orm import Session
 from sqlalchemy.orm import configure_mappers

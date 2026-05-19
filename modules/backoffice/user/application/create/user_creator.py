@@ -46,5 +46,5 @@ class UserCreator:
             is_active=is_active,
         )
 
-        self.__user_repository.save(user=user)
+        self.__user_repository.add(user=user)
         self.__event_bus.publish(user.pull_domain_events())

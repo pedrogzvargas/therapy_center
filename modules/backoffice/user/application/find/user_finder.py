@@ -13,9 +13,10 @@ class UserFinder:
         Args:
             user_repository: repository for user database table operations
         """
+
         self.__user_repository = user_repository
 
-    def __call__(self, user_id: UUID):
+    async def find(self, user_id: UUID):
         user_finder = DomainUserFinder(user_repository=self.__user_repository)
-        user = user_finder(user_id=user_id)
+        user = await user_finder.find(user_id=user_id)
         return user

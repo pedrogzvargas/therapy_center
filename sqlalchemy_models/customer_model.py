@@ -1,3 +1,5 @@
+from uuid import UUID
+from datetime import datetime
 from sqlalchemy import Table
 from sqlalchemy import Column
 from sqlalchemy import String
@@ -7,10 +9,21 @@ from sqlalchemy.sql import func
 from sqlalchemy.dialects import postgresql
 from sqlalchemy.orm import registry
 
-from app.config.database import metadata
-from modules.backoffice.customer.domain import Customer as BackofficeCustomer
+from flask_app.config.database import metadata
 
 mapper_registry = registry()
+
+
+class CustomerModel:
+
+    id: UUID
+    user_id: UUID
+    name: str
+    last_name: str
+    second_last_name: str | None
+    created_at: datetime
+    updated_at: datetime
+
 
 customer_table = Table(
     "customer",
@@ -30,4 +43,4 @@ customer_table = Table(
     ),
 )
 
-mapper_registry.map_imperatively(BackofficeCustomer, customer_table)
+mapper_registry.map_imperatively(CustomerModel, customer_table)

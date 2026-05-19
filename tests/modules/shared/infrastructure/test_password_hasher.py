@@ -1,4 +1,4 @@
-from modules.shared.password_hasher.infraestructure import Argon2PasswordHasher
+from modules.shared.password_hasher.infrastructure import Argon2PasswordHasher
 
 
 def test_password_hasher():

@@ -9,20 +9,29 @@ class PaymentMethodRepository(ABC):
     """
 
     @abstractmethod
-    def all(self):
+    async def all(self):
         """list all payment methods"""
         pass
 
     @abstractmethod
-    def get(self, id: UUID):
-        """get payment method"""
-        pass
-
-    def save(self, payment_method):
-        """save payment method"""
+    async def simple_search(self, filters: dict, limit: int = 10, page: int = 1, list_all: bool = False):
+        """simple payment search"""
         pass
 
     @abstractmethod
-    def delete(self, payment_method):
+    async def get(self, id: UUID):
+        """get payment method"""
+        pass
+
+    async def add(self, payment_method):
+        """add payment method"""
+        pass
+
+    async def patch(self, payment_method):
+        """patch payment method"""
+        pass
+
+    @abstractmethod
+    async def delete(self, id: UUID):
         """delete payment method"""
         pass

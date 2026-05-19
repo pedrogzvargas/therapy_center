@@ -1,3 +1,5 @@
+from uuid import UUID
+from datetime import datetime
 from sqlalchemy import Table
 from sqlalchemy import Column
 from sqlalchemy import String
@@ -7,11 +9,20 @@ from sqlalchemy.sql import func
 from sqlalchemy.dialects import postgresql
 from sqlalchemy.orm import registry
 
-from app.config.database import metadata
-from modules.app.payment_method.domain import PaymentMethod as AppPaymentMethod
-from modules.backoffice.payment_method.domain import PaymentMethod as BackofficePaymentMethod
+from flask_app.config.database import metadata
 
 mapper_registry = registry()
+
+class PaymentMethodModel:
+
+    id: UUID
+    user_id: UUID
+    name: str
+    is_active: bool
+    second_last_name: str | None
+    created_at: datetime
+    updated_at: datetime
+
 
 payment_method_table = Table(
     "payment_method",
@@ -29,9 +40,4 @@ payment_method_table = Table(
     ),
 )
 
-mapper_registry.map_imperatively(AppPaymentMethod, payment_method_table)
-mapper_registry.map_imperatively(BackofficePaymentMethod, payment_method_table, properties={
-        '_PaymentMethod__id': payment_method_table.c.id,
-        '_PaymentMethod__name': payment_method_table.c.name,
-        '_PaymentMethod__is_active': payment_method_table.c.is_active,
-    })
+mapper_registry.map_imperatively(PaymentMethodModel, payment_method_table)

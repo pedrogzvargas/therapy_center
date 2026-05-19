@@ -8,8 +8,8 @@ from modules.shared.serializer.domain import EntitySerializer
 from modules.shared.http.domain import status
 from modules.shared.http.domain import messages
 from modules.shared.environ.domain import Environ
-from modules.shared.environ.infraestructure import PyEnviron
-from modules.shared.serializer.infraestructure.marshmallow import MarshmallowEntitySerializer
+from modules.shared.environ.infrastructure import PyEnviron
+from modules.shared.serializer.infrastructure.marshmallow import MarshmallowEntitySerializer
 
 
 class PaymentMethodFinderController:
