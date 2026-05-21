@@ -7,6 +7,7 @@ class User(AggregateRoot):
     """
 
     def __init__(self, id, username, password, is_active, created_at, updated_at):
+        super().__init__()
         self.id = id
         self.username = username
         self.password = password

@@ -8,6 +8,8 @@ from .product_model import product_table
 from .product_model import ProductModel
 from .employee_model import employee_table
 from .employee_model import EmployeeModel
+from .refresh_token_model import RefreshTokenModel
+from .refresh_token_model import refresh_token_table
 
 
 __all__ = [
@@ -21,4 +23,6 @@ __all__ = [
     "ProductModel",
     "employee_table",
     "EmployeeModel",
+    "RefreshTokenModel",
+    "refresh_token_table",
 ]
