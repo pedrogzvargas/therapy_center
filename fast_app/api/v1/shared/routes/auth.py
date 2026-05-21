@@ -8,6 +8,7 @@ from fast_app.api.v1.shared.scehmas.auth import Login
 from fast_app.api.v1.shared.scehmas.auth import Logout
 from fast_app.api.v1.shared.scehmas.auth import RefreshToken
 from fast_app.core.db_session import get_session
+from fast_app.core.auth import get_current_user
 
 router = APIRouter()
 
@@ -19,15 +20,15 @@ async def login(response: Response, payload: Login, db_session = Depends(get_ses
     return controller_response
 
 @router.post("/logout")
-def login(response: Response, payload: Logout, db_session = Depends(get_session)):
-    logout_controller = LogoutController()
-    controller_response, code = logout_controller.logout(body=payload.model_dump())
+async def logout(response: Response, payload: Logout, db_session = Depends(get_session), _ = Depends(get_current_user)):
+    logout_controller = LogoutController(session=db_session)
+    controller_response, code = await logout_controller.logout(body=payload.model_dump())
     response.status_code = code
     return controller_response
 
 @router.post("/refresh-token")
-def refresh_token(response: Response, payload: RefreshToken):
-    refresh_token_controller = RefreshTokenController()
-    controller_response, code = refresh_token_controller.refresh(body=payload.model_dump())
+async def refresh_token(response: Response, payload: RefreshToken, db_session = Depends(get_session)):
+    refresh_token_controller = RefreshTokenController(session=db_session)
+    controller_response, code = await refresh_token_controller.refresh(body=payload.model_dump())
     response.status_code = code
     return controller_response

@@ -28,6 +28,7 @@ class UserCreatedDomainEvent(DomainEvent):
             is_active=self.__is_active,
             aggregate_id=self.aggregate_id,
             event_id=self.event_id,
+            event_name=self.event_name(),
             occurred_on=self.occurred_on,
         )
 

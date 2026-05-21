@@ -1,12 +1,17 @@
+from sqlalchemy.ext.asyncio import AsyncSession
 from modules.shared.auth.domain import TokenHandler
+from modules.shared.persistence.domain import UnitOfWork
 from modules.shared.auth.application import Logout
 from modules.shared.http.domain import status
 from modules.shared.http.domain import messages
 from modules.shared.auth.domain import ExpiredTokenError
 from modules.shared.auth.domain import InvalidTokenError
 from modules.shared.environ.domain import Environ
+from modules.shared.auth.domain import RefreshTokenRepository
 from modules.shared.environ.infrastructure import PyEnviron
 from modules.shared.auth.infrastructure import JwtTokenHandler
+from modules.shared.persistence.infrastructure import AlchemyUnitOfWork
+from modules.shared.auth.infrastructure import PostgresRefreshTokenRepository
 
 
 class LogoutController:
@@ -16,6 +21,9 @@ class LogoutController:
 
     def __init__(
         self,
+        session: AsyncSession,
+        refresh_token_repository: RefreshTokenRepository | None = None,
+        unit_of_work: UnitOfWork | None = None,
         token_handler: TokenHandler | None = None,
         environ: Environ | None = None
     ):
@@ -25,13 +33,21 @@ class LogoutController:
             environ: environ variable reader
         """
 
+        self.__session = session
+        self.__refresh_token_repository = refresh_token_repository or PostgresRefreshTokenRepository(
+            session=self.__session)
+        self.__unit_of_work = unit_of_work or AlchemyUnitOfWork(session=self.__session)
         self.__environ = environ or PyEnviron()
         self.__token_handler = token_handler or JwtTokenHandler(self.__environ.get_str("SECRET_KEY"))
 
-    def logout(self, body: dict):
+    async def logout(self, body: dict):
         try:
-            logout = Logout(token_handler=self.__token_handler)
-            logout.logout(token=body.get("access_token"))
+            logout = Logout(
+                unit_of_work=self.__unit_of_work,
+                refresh_token_repository=self.__refresh_token_repository,
+                token_handler=self.__token_handler,
+            )
+            await logout.logout(token=body.get("access_token"))
             response = {
                 "success": True,
                 "message": messages.SUCCESS_MESSAGE,

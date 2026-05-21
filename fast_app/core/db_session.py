@@ -5,7 +5,7 @@ async def get_session():
     environ = PyEnviron()
     db_values = dict(
         dialect=environ.get_str("POSTGRES_DIALECT"),
-        driver="asyncpg",
+        driver=environ.get_str("POSTGRES_DRIVER"),
         host=environ.get_str("POSTGRES_HOST"),
         user=environ.get_str("POSTGRES_USER"),
         password=environ.get_str("POSTGRES_PASSWORD"),
