@@ -3,8 +3,8 @@ from jwt import decode
 from jwt.exceptions import ExpiredSignatureError
 from jwt.exceptions import InvalidTokenError
 from modules.shared.auth.domain import TokenHandler
-from modules.shared.auth.domain import ExpiredTokenError
-from modules.shared.auth.domain import InvalidTokenError as DomainInvalidTokenError
+from modules.shared.auth.domain.exceptions import ExpiredTokenError
+from modules.shared.auth.domain.exceptions import InvalidTokenError as DomainInvalidTokenError
 
 
 class JwtTokenHandler(TokenHandler):

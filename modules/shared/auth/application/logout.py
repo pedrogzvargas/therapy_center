@@ -1,6 +1,6 @@
 from modules.shared.auth.domain import TokenHandler
-from modules.shared.auth.domain import InvalidTokenError
-from modules.shared.auth.domain import RefreshTokenRepository
+from modules.shared.auth.domain.exceptions import InvalidTokenError
+from modules.shared.auth.domain.repositories import RefreshTokenRepository
 from modules.shared.persistence.domain import UnitOfWork
 
 

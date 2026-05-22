@@ -1,9 +1,9 @@
 from uuid import UUID
 from sqlalchemy.ext.asyncio import AsyncSession
-from modules.shared.auth.domain import UserRepository
+from modules.shared.auth.domain.repositories import UserRepository
 from sqlalchemy import select
 from sqlalchemy_models import UserModel
-from .user_mapper import UserMapper
+from modules.shared.auth.infrastructure.mappers import UserMapper
 
 
 class PostgresUserRepository(UserRepository):

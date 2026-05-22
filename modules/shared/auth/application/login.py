@@ -4,10 +4,14 @@ from datetime import timezone
 from datetime import timedelta
 from modules.shared.persistence.domain import UnitOfWork
 from modules.shared.password_hasher.domain import PasswordHasher
-from modules.shared.auth.domain import RefreshToken
+from modules.shared.auth.domain.entities import RefreshToken
 from modules.shared.auth.domain import TokenHandler
-from modules.shared.auth.domain import UserRepository
-from modules.shared.auth.domain import RefreshTokenRepository
+from modules.shared.auth.domain.repositories import UserRepository
+from modules.shared.auth.domain.repositories import RefreshTokenRepository
+from modules.shared.auth.domain.repositories import UserRoleRepository
+from modules.shared.auth.domain.repositories import RoleRepository
+from modules.shared.auth.domain.repositories import PermissionRepository
+from modules.shared.auth.domain.repositories import RolePermissionRepository
 from modules.shared.auth.domain import UserDoesNotExist
 from modules.shared.auth.domain import WrongCredentials
 
@@ -18,12 +22,20 @@ class Login:
         self,
         unit_of_work: UnitOfWork,
         user_repository: UserRepository,
+        user_role_repository: UserRoleRepository,
+        role_repository: RoleRepository,
+        permission_repository: PermissionRepository,
+        role_permission_repository: RolePermissionRepository,
         refresh_token_repository: RefreshTokenRepository,
         password_hasher: PasswordHasher,
         token_handler: TokenHandler,
     ):
 
         self.__user_repository = user_repository
+        self.__user_role_repository = user_role_repository
+        self.__role_repository = role_repository
+        self.__permission_repository = permission_repository
+        self.__role_permission_repository = role_permission_repository
         self.__refresh_token_repository = refresh_token_repository
         self.__unit_of_work = unit_of_work
         self.__password_hasher = password_hasher
@@ -38,11 +50,22 @@ class Login:
         if not self.__password_hasher.verify(hashed_password=user.password, password=password):
             raise WrongCredentials(f"Wrong credentials")
 
+        users_roles = await self.__user_role_repository.list_by_user_id(user_id=user.id)
+        user_role_ids = [users_role.role_id for users_role in users_roles]
+
+        roles = await self.__role_repository.list_by_ids(user_role_ids)
+        role_permissions = await self.__role_permission_repository.list_by_role_ids(user_role_ids)
+
+        permission_ids = [permission.permission_id for permission in role_permissions]
+        permissions = await self.__permission_repository.list_by_ids(permission_ids)
+
         jti = uuid.uuid4()
 
         access_token_payload = dict(
             sub=str(user.id),
             type="access",
+            roles=[role.name for role in roles],
+            permissions=[permission.name for permission in permissions],
             jti=str(jti),
             iat=datetime.now(timezone.utc),
             exp=datetime.now(timezone.utc) + timedelta(minutes=15),
