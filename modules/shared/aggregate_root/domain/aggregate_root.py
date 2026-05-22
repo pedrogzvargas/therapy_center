@@ -1,5 +1,4 @@
 from typing import List
-from typing import NoReturn
 from modules.shared.bus.event.domain import DomainEvent
 
 
@@ -13,5 +12,5 @@ class AggregateRoot:
         self._domain_events = []
         return domain_events
 
-    def record(self, domain_event: DomainEvent) -> NoReturn:
+    def record(self, domain_event: DomainEvent) -> None:
         self._domain_events.append(domain_event)

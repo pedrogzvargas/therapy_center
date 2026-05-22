@@ -1,2 +1,0 @@
-class ExpiredTokenError(Exception):
-    pass

@@ -5,7 +5,7 @@ from fastapi.security import HTTPBearer
 from fastapi.security import HTTPAuthorizationCredentials
 from modules.shared.auth.infrastructure import JwtTokenHandler
 from modules.shared.environ.infrastructure import PyEnviron
-from modules.shared.auth.domain import ExpiredTokenError
+from modules.shared.auth.domain.exceptions import ExpiredTokenError
 
 security = HTTPBearer()
 environ = PyEnviron()
@@ -16,10 +16,7 @@ async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(s
 
     try:
         payload = token_handler.decode(token)
-        return {
-            "user_id": payload.get("sub"),
-            "jti": payload.get("jti"),
-        }
+        return payload
 
     except ExpiredTokenError as e:
         raise HTTPException(
@@ -32,3 +29,17 @@ async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(s
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Could not validate credentials",
         )
+
+def require_permission(permission: str):
+    async def dependency(current_user = Depends(get_current_user), ):
+        permissions = current_user.get("permissions", [])
+
+        if permission not in permissions:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Permission denied",
+            )
+
+        return current_user
+
+    return dependency

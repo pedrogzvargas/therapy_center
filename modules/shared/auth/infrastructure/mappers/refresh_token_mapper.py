@@ -1,5 +1,5 @@
 from sqlalchemy_models import RefreshTokenModel
-from modules.shared.auth.domain import RefreshToken
+from modules.shared.auth.domain.entities import RefreshToken
 
 
 class RefreshTokenMapper:

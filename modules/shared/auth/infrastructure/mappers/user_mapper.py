@@ -1,5 +1,5 @@
 from sqlalchemy_models import UserModel
-from modules.shared.auth.domain import User
+from modules.shared.auth.domain.entities import User
 
 
 class UserMapper:

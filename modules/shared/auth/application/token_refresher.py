@@ -4,10 +4,10 @@ from datetime import datetime
 from datetime import timezone
 from datetime import timedelta
 from modules.shared.persistence.domain import UnitOfWork
-from modules.shared.auth.domain import RefreshTokenRepository
+from modules.shared.auth.domain.repositories import RefreshTokenRepository
 from modules.shared.auth.domain import TokenHandler
-from modules.shared.auth.domain import InvalidTokenError
-from modules.shared.auth.domain import RefreshToken
+from modules.shared.auth.domain.exceptions import InvalidTokenError
+from modules.shared.auth.domain.entities import RefreshToken
 
 
 class TokenRefresher:

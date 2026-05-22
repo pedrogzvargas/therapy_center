@@ -1,8 +1,8 @@
 from uuid import UUID
 from sqlalchemy.ext.asyncio import AsyncSession
-from modules.shared.auth.domain import RefreshTokenRepository
 from sqlalchemy_models import RefreshTokenModel
-from .refresh_token_mapper import RefreshTokenMapper
+from modules.shared.auth.domain.repositories import RefreshTokenRepository
+from modules.shared.auth.infrastructure.mappers import RefreshTokenMapper
 
 
 class PostgresRefreshTokenRepository(RefreshTokenRepository):
