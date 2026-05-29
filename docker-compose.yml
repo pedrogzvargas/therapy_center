@@ -33,6 +33,26 @@ services:
     ports:
       - "5434:5432"
 
+  redis:
+    image: redis:7-alpine
+    container_name: therapy_center_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - ${REDIS_DATA}:/data
+    command: redis-server --appendonly yes
+    restart: unless-stopped
+
+  redisinsight:
+    image: redis/redisinsight:latest
+    container_name: redisinsight
+    ports:
+      - "5540:5540"
+    volumes:
+      - ${REDISINSIGHT_DATA}:/data
+    depends_on:
+      - redis
+
   zookeeper:
     image: confluentinc/cp-zookeeper:7.5.0
     container_name: therapy_center_zookeeper

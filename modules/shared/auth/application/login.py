@@ -6,6 +6,7 @@ from modules.shared.persistence.domain import UnitOfWork
 from modules.shared.password_hasher.domain import PasswordHasher
 from modules.shared.auth.domain.entities import RefreshToken
 from modules.shared.auth.domain import TokenHandler
+from modules.shared.auth.domain import AuthAttemptHandler
 from modules.shared.auth.domain.repositories import UserRepository
 from modules.shared.auth.domain.repositories import RefreshTokenRepository
 from modules.shared.auth.domain.repositories import UserRoleRepository
@@ -14,6 +15,7 @@ from modules.shared.auth.domain.repositories import PermissionRepository
 from modules.shared.auth.domain.repositories import RolePermissionRepository
 from modules.shared.auth.domain import UserDoesNotExist
 from modules.shared.auth.domain import WrongCredentials
+from modules.shared.auth.domain import LockedAccount
 
 
 class Login:
@@ -29,6 +31,7 @@ class Login:
         refresh_token_repository: RefreshTokenRepository,
         password_hasher: PasswordHasher,
         token_handler: TokenHandler,
+        auth_attempt_handler: AuthAttemptHandler,
     ):
 
         self.__user_repository = user_repository
@@ -40,15 +43,23 @@ class Login:
         self.__unit_of_work = unit_of_work
         self.__password_hasher = password_hasher
         self.__token_handler = token_handler
+        self.__auth_attempt_handler = auth_attempt_handler
 
-    async def login(self, username, password):
+    async def login(self, username: str, password: str):
+        if await self.__auth_attempt_handler.is_blocked(email=username):
+            raise LockedAccount(f"Account with username: {username} locked")
+
         user = await self.__user_repository.get_by_username(username=username)
 
         if not user:
+            await self.__auth_attempt_handler.register_failed_attempt(email=username)
             raise UserDoesNotExist(f"User with username: {username} does not exist")
 
         if not self.__password_hasher.verify(hashed_password=user.password, password=password):
+            await self.__auth_attempt_handler.register_failed_attempt(email=username)
             raise WrongCredentials(f"Wrong credentials")
+
+        await self.__auth_attempt_handler.clear_attempts(email=username)
 
         users_roles = await self.__user_role_repository.list_by_user_id(user_id=user.id)
         user_role_ids = [users_role.role_id for users_role in users_roles]

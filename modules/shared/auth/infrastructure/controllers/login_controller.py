@@ -1,9 +1,12 @@
 from sqlalchemy.ext.asyncio import AsyncSession
+from redis.asyncio import Redis
 from modules.shared.auth.domain.repositories import UserRepository
 from modules.shared.password_hasher.domain import PasswordHasher
 from modules.shared.auth.domain import TokenHandler
+from modules.shared.auth.domain import AuthAttemptHandler
 from modules.shared.auth.domain import UserDoesNotExist
 from modules.shared.auth.domain import WrongCredentials
+from modules.shared.auth.domain import LockedAccount
 from modules.shared.persistence.domain import UnitOfWork
 from modules.shared.auth.domain.repositories import RefreshTokenRepository
 from modules.shared.auth.domain.repositories import UserRoleRepository
@@ -27,6 +30,7 @@ from modules.shared.serializer.infrastructure.marshmallow import MarshmallowEnti
 from modules.shared.password_hasher.infrastructure import Argon2PasswordHasher
 from modules.shared.persistence.infrastructure import AlchemyUnitOfWork
 from modules.shared.auth.infrastructure import JwtTokenHandler
+from modules.shared.auth.infrastructure import RedisAuthAttemptHandler
 
 
 class LoginController:
@@ -46,6 +50,7 @@ class LoginController:
         refresh_token_repository: RefreshTokenRepository | None = None,
         password_hasher: PasswordHasher | None = None,
         token_handler: TokenHandler | None = None,
+        auth_attempt_handler: AuthAttemptHandler | None = None,
         entity_serializer: EntitySerializer | None = None,
         environ: Environ | None = None
     ):
@@ -69,6 +74,13 @@ class LoginController:
         self.__refresh_token_repository = refresh_token_repository or PostgresRefreshTokenRepository(session=self.__session)
         self.__password_hasher = password_hasher or Argon2PasswordHasher()
         self.__token_handler = token_handler or JwtTokenHandler(self.__environ.get_str("SECRET_KEY"))
+        self.__auth_attempt_handler = auth_attempt_handler or RedisAuthAttemptHandler(
+            Redis(
+                host="localhost",
+                port=6379,
+                decode_responses=True,
+            ), environ=self.__environ
+        )
         self.__entity_serializer = entity_serializer or MarshmallowEntitySerializer(schema=LoginSchema())
 
     async def login(self, body: dict):
@@ -83,6 +95,7 @@ class LoginController:
                 refresh_token_repository=self.__refresh_token_repository,
                 password_hasher=self.__password_hasher,
                 token_handler=self.__token_handler,
+                auth_attempt_handler=self.__auth_attempt_handler,
             )
             access_token, refresh_token = await login.login(username=body.get("username"), password=body.get("password"))
             login_response = self.__entity_serializer(dict(access_token=access_token, refresh_token=refresh_token))
@@ -98,6 +111,14 @@ class LoginController:
                 "message": f"{messages.WRONG_CREDENTIALS}",
                 "data": {}
             }, status.HTTP_400_BAD_REQUEST
+            return response
+
+        except LockedAccount as ex:
+            response = {
+                "success": False,
+                "message": f"{messages.TOO_MANY_LOGIN_ATTEMPTS}",
+                "data": {}
+            }, status.HTTP_429_TOO_MANY_REQUESTS
             return response
 
         except Exception as ex:

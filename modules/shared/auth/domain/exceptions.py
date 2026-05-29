@@ -2,6 +2,10 @@ class UserDoesNotExist(Exception):
     ...
 
 
+class LockedAccount(Exception):
+    ...
+
+
 class WrongCredentials(Exception):
     ...
 
