@@ -1,0 +1,17 @@
+[
+  {
+    "id": "83e3b75f-592a-49c2-af1f-67504f7bc695",
+    "name": "Tarjeta",
+    "is_active": true
+  },
+  {
+    "id": "a5a8c168-7b65-4631-b3ab-f54afbd304c2",
+    "name": "Transferencia",
+    "is_active": true
+  },
+  {
+    "id": "3e45a0f2-116a-4190-bc3c-d267afb53289",
+    "name": "Efectivo",
+    "is_active": true
+  }
+]
