@@ -45,21 +45,21 @@ class Login:
         self.__token_handler = token_handler
         self.__auth_attempt_handler = auth_attempt_handler
 
-    async def login(self, username: str, password: str):
-        if await self.__auth_attempt_handler.is_blocked(email=username):
-            raise LockedAccount(f"Account with username: {username} locked")
+    async def login(self, email: str, password: str):
+        if await self.__auth_attempt_handler.is_blocked(email=email):
+            raise LockedAccount(f"Account with username: {email} locked")
 
-        user = await self.__user_repository.get_by_username(username=username)
+        user = await self.__user_repository.get_by_email(email=email)
 
         if not user:
-            await self.__auth_attempt_handler.register_failed_attempt(email=username)
-            raise UserDoesNotExist(f"User with username: {username} does not exist")
+            await self.__auth_attempt_handler.register_failed_attempt(email=email)
+            raise UserDoesNotExist(f"User with username: {email} does not exist")
 
         if not self.__password_hasher.verify(hashed_password=user.password, password=password):
-            await self.__auth_attempt_handler.register_failed_attempt(email=username)
+            await self.__auth_attempt_handler.register_failed_attempt(email=email)
             raise WrongCredentials(f"Wrong credentials")
 
-        await self.__auth_attempt_handler.clear_attempts(email=username)
+        await self.__auth_attempt_handler.clear_attempts(email=email)
 
         users_roles = await self.__user_role_repository.list_by_user_id(user_id=user.id)
         user_role_ids = [users_role.role_id for users_role in users_roles]

@@ -16,6 +16,7 @@ mapper_registry = registry()
 class UserModel:
 
     id: UUID
+    email: str
     username: str
     password: str
     is_active: bool
@@ -26,7 +27,8 @@ user_table = Table(
     "user",
     metadata,
     Column("id", postgresql.UUID(as_uuid=True), primary_key=True),
-    Column("username", String(100), nullable=False, unique=True),
+    Column("email", String(254), nullable=False, unique=True),
+    Column("username", String(100), nullable=True, unique=True),
     Column("password", String(200), nullable=False),
     Column("is_active", Boolean(), default=True, nullable=False),
     Column("created_at", DateTime(timezone=True), nullable=False, default=func.now()),

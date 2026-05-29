@@ -8,6 +8,7 @@ class UserMapper:
     def to_model(entity: User) -> UserModel:
         model = UserModel()
         model.id = entity.id
+        model.email = entity.email
         model.username = entity.username
         model.password = entity.password
         model.is_active = entity.is_active
@@ -19,6 +20,7 @@ class UserMapper:
     def to_domain(model: UserModel) -> User:
         return User(
             id=model.id,
+            email=model.email,
             username=model.username,
             password=model.password,
             is_active=model.is_active,
