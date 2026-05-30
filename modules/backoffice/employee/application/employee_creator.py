@@ -42,7 +42,7 @@ class EmployeeCreator:
         id: UUID,
         name: str,
         last_name: str,
-        username: str,
+        email: str,
         password: str,
         is_active: bool,
         second_last_name: str | None  = None,
@@ -56,7 +56,7 @@ class EmployeeCreator:
 
         user = User.create(
             id=id,
-            username=username,
+            email=email,
             password=self.__password_hasher.hash(password),
             is_active=is_active,
         )

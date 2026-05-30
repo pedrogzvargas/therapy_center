@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from pydantic import EmailStr
 from fastapi import Query
 from typing import Optional
 
@@ -8,7 +9,7 @@ class Employee(BaseModel):
     name: str
     last_name: str
     second_last_name: str | None = None
-    username: str
+    email: EmailStr
     password: str
     is_active: bool = True
 

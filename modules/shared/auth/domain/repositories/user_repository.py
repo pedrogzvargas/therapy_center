@@ -19,6 +19,6 @@ class UserRepository(ABC):
         pass
 
     @abstractmethod
-    async def get_by_username(self, username: str):
-        """get user by username"""
+    async def get_by_email(self, email: str):
+        """get user by email"""
         pass

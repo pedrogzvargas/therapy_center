@@ -62,7 +62,7 @@ class CustomerCreatorController:
                 name=body.get("name"),
                 last_name=body.get("last_name"),
                 second_last_name=body.get("second_last_name"),
-                username=body.get("username"),
+                email=body.get("email"),
                 password=body.get("password"),
                 is_active=body.get("is_active"),
             )

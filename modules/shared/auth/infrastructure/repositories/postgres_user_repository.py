@@ -29,10 +29,10 @@ class PostgresUserRepository(UserRepository):
 
         return user
 
-    async def get_by_username(self, username: str):
+    async def get_by_email(self, email: str):
         """get user"""
 
-        stmt = select(UserModel).filter_by(username=username)
+        stmt = select(UserModel).filter_by(email=email)
 
         user = (await self.__session.execute(stmt)).scalars().one_or_none()
 

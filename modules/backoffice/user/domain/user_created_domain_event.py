@@ -6,6 +6,7 @@ class UserCreatedDomainEvent(DomainEvent):
     def __init__(
         self,
         aggregate_id,
+        email,
         username,
         password,
         is_active,
@@ -14,6 +15,7 @@ class UserCreatedDomainEvent(DomainEvent):
     ):
         super().__init__(aggregate_id=aggregate_id, event_id=event_id, occurred_on=occurred_on)
         self.__aggregate_id= aggregate_id
+        self.__email = email
         self.__username = username
         self.__password = password
         self.__is_active = is_active
@@ -23,6 +25,7 @@ class UserCreatedDomainEvent(DomainEvent):
 
     def to_primitives(self):
         return dict(
+            email=self.email,
             username=self.__username,
             password=self.__password,
             is_active=self.__is_active,
@@ -35,12 +38,17 @@ class UserCreatedDomainEvent(DomainEvent):
     def from_primitives(self, aggregate_id, body, event_id, occurred_on):
         return UserCreatedDomainEvent(
             aggregate_id=aggregate_id,
+            email=body.get("email"),
             username=body.get("username"),
             password=body.get("password"),
             is_active=body.get("is_active"),
             event_id=event_id,
             occurred_on=occurred_on,
         )
+
+    @property
+    def email(self):
+        return self.__email
 
     @property
     def username(self):

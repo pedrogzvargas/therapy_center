@@ -97,7 +97,7 @@ class LoginController:
                 token_handler=self.__token_handler,
                 auth_attempt_handler=self.__auth_attempt_handler,
             )
-            access_token, refresh_token = await login.login(username=body.get("username"), password=body.get("password"))
+            access_token, refresh_token = await login.login(email=body.get("email"), password=body.get("password"))
             login_response = self.__entity_serializer(dict(access_token=access_token, refresh_token=refresh_token))
             response = {
                 "success": True,

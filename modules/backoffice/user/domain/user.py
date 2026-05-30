@@ -8,9 +8,10 @@ class User(AggregateRoot):
     User entity
     """
 
-    def __init__(self, id, username, password, is_active, created_at, updated_at):
+    def __init__(self, id, email, username, password, is_active, created_at, updated_at):
         super().__init__()
         self.id = id
+        self.email = email
         self.username = username
         self.password = password
         self.is_active = is_active
@@ -18,9 +19,10 @@ class User(AggregateRoot):
         self.updated_at = updated_at
 
     @staticmethod
-    def create(id, username, password, is_active, created_at=None, updated_at=None):
+    def create(id, email, password, is_active, username=None, created_at=None, updated_at=None):
         user = User(
             id=id,
+            email=email,
             username=username,
             password=password,
             is_active=is_active,
@@ -31,6 +33,7 @@ class User(AggregateRoot):
         user.record(
             UserCreatedDomainEvent(
                 aggregate_id=id,
+                email=email,
                 username=username,
                 password=password,
                 is_active=is_active,
@@ -54,6 +57,7 @@ class User(AggregateRoot):
     def to_dict(self):
         return dict(
             id=self.id,
+            email=self.email,
             username=self.username,
             password=self.password,
             is_active=self.is_active,
