@@ -40,3 +40,8 @@ class PostgresUserRepository(UserRepository):
             return UserMapper.to_domain(user)
 
         return user
+
+    async def patch(self, user):
+        """patch user"""
+
+        await self.__session.merge(UserMapper.to_model(user))

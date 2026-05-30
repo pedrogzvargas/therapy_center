@@ -6,9 +6,10 @@ class User(AggregateRoot):
     User entity
     """
 
-    def __init__(self, id, username, password, is_active, created_at, updated_at):
+    def __init__(self, id, email, username, password, is_active, created_at, updated_at):
         super().__init__()
         self.id = id
+        self.email = email
         self.username = username
         self.password = password
         self.is_active = is_active
@@ -18,6 +19,7 @@ class User(AggregateRoot):
     def to_dict(self):
         return dict(
             id=self.id,
+            email=self.email,
             username=self.username,
             password=self.password,
             is_active=self.is_active,
