@@ -13,3 +13,12 @@ class RefreshToken(BaseModel):
 
 class Logout(BaseModel):
     access_token: str
+
+
+class ForgotPassword(BaseModel):
+    email: EmailStr
+
+
+class ResetPassword(BaseModel):
+    token: str
+    password: str

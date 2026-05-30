@@ -22,3 +22,8 @@ class UserRepository(ABC):
     async def get_by_email(self, email: str):
         """get user by email"""
         pass
+
+    @abstractmethod
+    async def patch(self, user):
+        """patch user"""
+        pass
