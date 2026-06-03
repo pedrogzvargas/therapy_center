@@ -12,7 +12,7 @@ class RefreshToken(BaseModel):
 
 
 class Logout(BaseModel):
-    access_token: str
+    refresh_token: str
 
 
 class ForgotPassword(BaseModel):

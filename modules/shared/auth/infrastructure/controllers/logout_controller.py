@@ -47,7 +47,7 @@ class LogoutController:
                 refresh_token_repository=self.__refresh_token_repository,
                 token_handler=self.__token_handler,
             )
-            await logout.logout(token=body.get("access_token"))
+            await logout.logout(token=body.get("refresh_token"))
             response = {
                 "success": True,
                 "message": messages.SUCCESS_MESSAGE,
