@@ -15,6 +15,11 @@ async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(s
     try:
         token_handler = JwtTokenHandler(settings.secret_key)
         payload = token_handler.decode(token)
+        if payload.get("type") != "access":
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Could not validate credentials",
+            )
         return payload
 
     except ExpiredTokenError as e:

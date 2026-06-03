@@ -21,7 +21,7 @@ class Logout:
         jti = refresh_token_payload.get("jti")
         token_type = refresh_token_payload.get("type")
 
-        if token_type != "access":
+        if token_type != "refresh":
             raise InvalidTokenError("Invalid token")
 
         refresh_token = await self.__refresh_token_repository.get(id=jti)
