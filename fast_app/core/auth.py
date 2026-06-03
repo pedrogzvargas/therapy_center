@@ -4,17 +4,16 @@ from fastapi import status
 from fastapi.security import HTTPBearer
 from fastapi.security import HTTPAuthorizationCredentials
 from modules.shared.auth.infrastructure import JwtTokenHandler
-from modules.shared.environ.infrastructure import PyEnviron
 from modules.shared.auth.domain.exceptions import ExpiredTokenError
+from .config import get_settings
 
 security = HTTPBearer()
-environ = PyEnviron()
-token_handler = JwtTokenHandler(environ.get_str("SECRET_KEY"))
 
-async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(security)):
+async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(security), settings = Depends(get_settings)):
     token = credentials.credentials
 
     try:
+        token_handler = JwtTokenHandler(settings.secret_key)
         payload = token_handler.decode(token)
         return payload
 

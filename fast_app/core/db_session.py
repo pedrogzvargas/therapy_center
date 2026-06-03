@@ -1,17 +1,17 @@
-from modules.shared.environ.infrastructure import PyEnviron
 from modules.shared.persistence.infrastructure import AsyncAlchemySessionCreator
+from .config import get_settings
 
 async def get_session():
-    environ = PyEnviron()
+    settings = get_settings()
     db_values = dict(
-        dialect=environ.get_str("POSTGRES_DIALECT"),
-        driver=environ.get_str("POSTGRES_DRIVER"),
-        host=environ.get_str("POSTGRES_HOST"),
-        user=environ.get_str("POSTGRES_USER"),
-        password=environ.get_str("POSTGRES_PASSWORD"),
-        port=environ.get_str("POSTGRES_PORT"),
-        db=environ.get_str("POSTGRES_DB"),
-        echo=environ.get_bool("SQL_ECHO", False),
+        dialect=settings.postgres_dialect,
+        driver=settings.postgres_driver,
+        host=settings.postgres_host,
+        user=settings.postgres_user,
+        password=settings.postgres_password,
+        port=settings.postgres_port,
+        db=settings.postgres_db,
+        echo=settings.sql_echo,
     )
 
     async with AsyncAlchemySessionCreator(**db_values).get_session() as session:
